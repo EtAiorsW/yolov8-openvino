@@ -108,13 +108,13 @@ void yolov8_async_infer()
         return;
     }
     float factor = 0;
-    requests[0].get_input_tensor().set_shape(std::vector<size_t>{1, 3, 640, 640});
-    requests[1].get_input_tensor().set_shape(std::vector<size_t>{1, 3, 640, 640});
+    requests[0].get_input_tensor().set_shape(std::vector<size_t>{1, 3, shape, shape});
+    requests[1].get_input_tensor().set_shape(std::vector<size_t>{1, 3, shape, shape});
     cv::Mat frame;
     capture.read(frame);
-    std::vector<float> inputData(640 * 640 * 3);
-    pre_process(&frame, 640, &factor, inputData);
-    memcpy(requests[0].get_input_tensor().data<float>(), inputData.data(), 640 * 640 * 3 * sizeof(float));
+    std::vector<float> inputData(shape * shape * 3);
+    pre_process(&frame, shape, &factor, inputData);
+    memcpy(requests[0].get_input_tensor().data<float>(), inputData.data(), shape * shape * 3 * sizeof(float));
     requests[0].start_async();
     while (true)
     {
@@ -124,8 +124,8 @@ void yolov8_async_infer()
         }
 
         auto start = std::chrono::high_resolution_clock::now();
-        pre_process(&next_frame, 640, &factor, inputData);
-        memcpy(requests[1].get_input_tensor().data<float>(), inputData.data(), 640 * 640 * 3 * sizeof(float));
+        pre_process(&next_frame, shape, &factor, inputData);
+        memcpy(requests[1].get_input_tensor().data<float>(), inputData.data(), shape * shape * 3 * sizeof(float));
         requests[1].start_async();
         requests[0].wait();
         float* output_data = requests[0].get_output_tensor().data<float>();

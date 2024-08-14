@@ -16,10 +16,6 @@ const std::vector<std::string> class_names = { "person", "bicycle", "car", "moto
 const int shape = 640;
 const int outputLength = 8400;
 const int class_num = 80;
-//const std::vector<std::string> class_names = { "bubble", "impurity" };
-//const int shape = 1920;
-//const int outputLength = 136000;
-//const int class_num = 2;
 
 
 struct DetResult
