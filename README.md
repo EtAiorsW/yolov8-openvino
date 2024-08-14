@@ -8,7 +8,7 @@ This is the code to implement YOLOV8 using OpenVINO(C++).
 
 # Run
 
-make build && cd build
+mkdir build && cd build
 
 cmake ..
 
